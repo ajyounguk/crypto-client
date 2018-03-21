@@ -1,3 +1,5 @@
+// crypto server, encrypt, decrypt and hash
+
 var express = require('express')
 var app = express()
 
@@ -15,7 +17,7 @@ var cryptoController = require('./controllers/cryptoController')
 cryptoController(app)
 
 
-console.log("Crypt server listening on port", port)
+console.log("Crypto server listening on port", port)
 
 app.listen(port)
 

@@ -100,7 +100,7 @@
     display : block;
     font-weight : bold;
     font : 14px;
-    background-color :rgb(245, 246, 255);
+    background-color :rgb(227, 228, 238);
 }
 
 
@@ -193,5 +193,5 @@ select{
 
 input[readonly]
 {
-    background-color: rgb(245, 246, 255);
+    background-color: rgb(235, 236, 243);
 }
