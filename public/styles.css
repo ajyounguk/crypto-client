@@ -1,5 +1,3 @@
-
-
 .simple-style {
     margin :10px;
 }
@@ -36,6 +34,7 @@
 }
 .simple-style span {
     font-family : Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-size : 10px;
 }
 
 .simple-style h1 {

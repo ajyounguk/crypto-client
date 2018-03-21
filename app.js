@@ -9,10 +9,10 @@ app.use('/assets', express.static(__dirname+'/public'))
 app.set('views', __dirname+'/views');
 app.set('view engine', 'ejs')
 
-var cryptController = require('./controllers/cryptController')
+var cryptoController = require('./controllers/cryptoController')
 
 
-cryptController(app)
+cryptoController(app)
 
 
 console.log("Crypt server listening on port", port)

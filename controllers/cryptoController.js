@@ -4,7 +4,6 @@ module.exports = function (app) {
     var urlencodedParser = bodyParser.urlencoded({extended: false})
 
     var crypto = require('crypto')
-    var algorithm = 'aes-256-ctr'
 
     var encryption = {
         data: "",
@@ -27,7 +26,7 @@ module.exports = function (app) {
 // encryption helper function
     function encrypt_helper(encryption, callback) {
         
-        var cipher = crypto.createCipher(algorithm, encryption.secret)
+        var cipher = crypto.createCipher('aes-256-ctr', encryption.secret)
         var crypted = cipher.update(encryption.data,'utf8','hex')
         crypted += cipher.final('hex');
         
@@ -38,7 +37,7 @@ module.exports = function (app) {
 
 // decryption helper function
     function decrypt_helper(decryption, callback) {
-        var decipher = crypto.createDecipher(algorithm, decryption.secret)
+        var decipher = crypto.createDecipher('aes-256-ctr', decryption.secret)
         var dec = decipher.update(decryption.cipher,'hex','utf8')
         dec += decipher.final('utf8');
 
@@ -65,6 +64,24 @@ module.exports = function (app) {
 // login and serve up index
     app.get('/', function (req, res) {
 
+        var encryption = {
+            data: "",
+            secret: "",
+            cipher: ""
+        }  
+    
+        var decryption = {
+            data: "",   
+            secret: "",
+            cipher: ""
+        }
+    
+        var hashed = {
+            data: "",   
+            secret: "",
+            hash: ""
+        }
+
         res.setHeader('Content-Type', 'text/html');
         res.render('./index', {encryption: encryption, decryption: decryption, hashed: hashed})
     })
@@ -77,6 +94,7 @@ module.exports = function (app) {
 
         encrypt_helper (encryption, function (encryption) {
             decryption.data = ""
+            console.log('encrypt:', encryption)
             res.render('./index', {encryption: encryption, decryption: decryption, hashed: hashed})
         })
     })
@@ -91,6 +109,7 @@ module.exports = function (app) {
         decryption.secret = req.body.secret
 
         decrypt_helper (decryption, function (decryption) {
+            console.log('decrypt:', decryption )
             res.render('./index', {encryption: encryption, decryption: decryption, hashed: hashed})
         })
     })
@@ -106,7 +125,7 @@ app.post('/hash', urlencodedParser, function (req, res) {
     hashed.secret = req.body.secret
 
     hash_helper (hashed, function (hashed) {
-        console.log(hashed)
+        console.log('hash:',hashed)
         res.render('./index', {encryption: encryption, decryption: decryption, hashed: hashed})
     })
 })
