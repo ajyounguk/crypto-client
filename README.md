@@ -3,7 +3,7 @@
 ## What is this?
 This application provides a Node.js webserver, and a html interface to demonstrate the principles of encryption, decryption and hashing.
 
-**_IMPORTANT DISCLAIMER_** This is not a secure application, or a secure way of encrypting data, it's a simple demo to illustrate the principles only. Do not use this a secure encryption example / reference code for a secure system in any way. Please refer to the numerous articles and info on encryption and security on the interwebs for that. 
+**_IMPORTANT DISCLAIMER!!_** This is not a secure application, or a secure way of encrypting data, it's a simple demo to illustrate the principles only. Do not use this a secure encryption example / reference code for a secure system in any way. Please refer to the numerous articles and info on encryption and security on the interwebs for that!
 
 ## Contains
 - /public = CSS (stylesheet)
