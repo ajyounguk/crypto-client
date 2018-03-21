@@ -1,0 +1,88 @@
+<html>
+<head><link rel="stylesheet" type="text/css" href="/assets/styles.css"/></head>
+
+<body style="background-color: rgb(229, 245, 250);">
+<title>AES Crypt Demo</title>
+<div class="simple-style" >
+
+    <div>
+        <h2>AES 256 Encryption Demo</h2><hr>
+    </div>
+  
+    <!-- 1. Encrypt -->
+    <form method="POST" action="/encrypt" >
+
+        <legend>1. Encrypt</legend><hr>
+        <ul>
+
+            <label>Plaintext:</label>
+            <textarea name="data" id ="data" placeholder="plaintext..." class ="input-textarea" rows=12 cols=120 required><%= encryption.data %></textarea>
+
+            
+            <label>Secret:</label>
+
+            <input type="text" value="<%= encryption.secret %>" name="secret" id ="secret" class="field-small" placeholder="secret" size=50 required>
+
+            <br><br><input type="submit" value="Encrypt"/>
+            <br><br>
+
+            <label>Encrypted Text:</label>
+            <textarea name="cipher" id ="cipher" class="encrypted" rows=12 cols=120 readonly><%= encryption.cipher %></textarea><br>
+
+        </ul>
+    </form>
+    <br>
+
+    <!-- 2. Decrypt -->
+    <form method="POST" action="/decrypt" >
+
+        <legend>2. Decrypt</legend><hr>
+        <ul>
+
+            <label>Cipher:</label>
+            <textarea name="cipher" id ="cipher" class ="input-textarea" placeholder="cypher..." class ="input-textarea" rows=12 cols=120 required><%= encryption.cipher %></textarea><br>
+
+ 
+            <label>Secret:</label>
+
+            <input type="text" name="secret" id ="secret" class="field-small" placeholder ="secret" value="<%- encryption.secret %>" size=50 required>
+
+            <br><br><input type="submit" value="Decrypt" />
+            <br><br>
+
+            <label>Decrypted Text:</label>
+            <textarea name="plaintext" id ="plaintext" rows=12 cols=120 readonly><%= decryption.data %></textarea><br>
+
+        </ul>
+    </form>
+    <br>
+
+
+    <!-- 3. Hash -->
+    <form method="POST" action="/hash" >
+
+        <legend>3. Hash</legend><hr>
+        <ul>
+
+            <label>Plaintext:</label>
+            <textarea name="data" id ="data" class ="input-textarea" placeholder="Plaintext..." class ="input-textarea" rows=12 cols=120 required><%= hashed.data %></textarea><br>
+
+            <label>Secret:</label>
+            <input type="text" name="secret" id ="secret" class="field-small" placeholder ="secret" value="<%- hashed.secret %>" size=50 required>
+
+            <br><br><input type="submit" value="Hash" />
+            <br><br>
+
+            <label>Hashed Text:</label>
+            <textarea name="hashed" id ="hashed" rows=12 cols=120 readonly><%= hashed.hash %></textarea><br>
+
+        </ul>
+    </form>
+    <br>
+
+</div>
+<br>
+<br>
+<br>
+</body>
+</html>
