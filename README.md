@@ -3,7 +3,7 @@
 ## What is this?
 This application provides a Node.js webserver, and a html interface to demonstrate the principles of encryption, decryption and hashing.
 
-**_IMPORTANT DISCLAIMER!!_** This is not a secure application, or a secure way of encrypting data, it's a simple demo to illustrate the principles only. Do not use this a secure encryption example / reference code for a secure system in any way. Please refer to the numerous articles and info on encryption and security on the interwebs for that!
+**_IMPORTANT DISCLAIMER!!_** This is not a secure application, or a secure or recommended way of encrypting data, it's a simple demo to illustrate the principles only. Do not use this a secure encryption example / reference code for a secure system in any way. Please refer to the numerous articles and info on encryption and security on the interwebs for that!
 
 ## Contains
 - /public = CSS (stylesheet)
@@ -12,12 +12,14 @@ This application provides a Node.js webserver, and a html interface to demonstra
 - app.js main app code
 
 ## Functionality:
-- **encrypt** plaintext to cipher using password/secret
-- **decrypt** cipher to plaintext using password/secret
-- **hash** plaintext, using an optional password/secret
+- **encrypt** plaintext to cipher using password/secret (AES)
+- **decrypt** cipher to plaintext using password/secret (AES)
+- **hash** plaintext, using an optional password/secret (SHA-2)
+- **rsa key generation** create private and public keys
+- **rsa encryption** using public key
+- **rsa decryption** using private key
 
-### todo :
-- hashing example
+
 
 ## Acknowledgements
 Based on Christoph Hartmann examples at:
@@ -33,12 +35,10 @@ cd crypto-demo
 npm install
 ```
 
-
-
 ## How to run it
 node app.js
 
-point your browser at the local/remoteIP port 3000 to load the HTML UI
+point your browser at the local/remoteIP port 3000 to load the cryptography demo html UI
 
 
 
