@@ -13,9 +13,7 @@ app.set('view engine', 'ejs')
 
 var cryptoController = require('./controllers/cryptoController')
 
-
 cryptoController(app)
-
 
 console.log("Crypto server listening on port", port)
 

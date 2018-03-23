@@ -18,6 +18,7 @@
   "homepage": "https://github.com/ajyounguk/crypt-demo#readme",
   "dependencies": {
     "ejs": "^2.5.7",
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "ursa": "^0.9.4"
   }
 }
