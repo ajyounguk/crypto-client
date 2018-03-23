@@ -83,7 +83,7 @@ module.exports = function (app) {
         }
 
         res.setHeader('Content-Type', 'text/html');
-        res.render('./index', {encryption: encryption, decryption: decryption, hashed: hashed})
+        res.render('./index', {encryption: encryption, decryption: decryption, hashed: hashed, menuitem: 0})
     })
 
 // 1. encrypt
@@ -95,7 +95,7 @@ module.exports = function (app) {
         encrypt_helper (encryption, function (encryption) {
             decryption.data = ""
             console.log('encrypt:', encryption)
-            res.render('./index', {encryption: encryption, decryption: decryption, hashed: hashed})
+            res.render('./index', {encryption: encryption, decryption: decryption, hashed: hashed, menuitem: 0})
         })
     })
 
@@ -110,7 +110,7 @@ module.exports = function (app) {
 
         decrypt_helper (decryption, function (decryption) {
             console.log('decrypt:', decryption )
-            res.render('./index', {encryption: encryption, decryption: decryption, hashed: hashed})
+            res.render('./index', {encryption: encryption, decryption: decryption, hashed: hashed, menuitem: 1})
         })
     })
 
@@ -126,7 +126,7 @@ app.post('/hash', urlencodedParser, function (req, res) {
 
     hash_helper (hashed, function (hashed) {
         console.log('hash:',hashed)
-        res.render('./index', {encryption: encryption, decryption: decryption, hashed: hashed})
+        res.render('./index', {encryption: encryption, decryption: decryption, hashed: hashed, menuitem: 2})
     })
 })
 

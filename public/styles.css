@@ -15,8 +15,8 @@
     margin : 0px;   
 }
 
-.simple-style div {
-    padding : 15px 15px ;
+.simple-style .headerdiv {
+    padding : 8px 16px ;
     background-color: rgb(31, 104, 122);
 
 }
@@ -103,8 +103,6 @@
     background-color :rgb(227, 228, 238);
 }
 
-
-
 .simple-style .input-textarea {
     padding : 7px;
     display : block;
@@ -119,6 +117,7 @@
     font-weight : bold;
     font : 14px;
 }
+
 
 .simple-style input[type=text], 
 .simple-style input[type=date],

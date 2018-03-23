@@ -1,92 +1,130 @@
 <html>
 <head><link rel="stylesheet" type="text/css" href="/assets/styles.css"/></head>
 
-<body style="background-color: rgb(229, 245, 250);">
+<body onload="initPage()" style="background-color: rgb(229, 245, 250);">
 <title>Crypto Demo</title>
 <div class="simple-style" >
 
-    <div>
+    <div class ="headerdiv">
         <h2>Crypto Demo</h2><hr>
     </div>
-  
-    <!-- 1. Encrypt -->
-    <form method="POST" action="/encrypt" >
 
-        <legend>1. Encrypt</legend><hr>
-        <span><i>algorithm = Advanced Encryption Standard (AES) 256</i></span>
-        <ul>
-     
+    <div class ="headerdiv">
+        <tr>
+            <td><input type="submit" value ="Encrypt" onclick="openMenu('1')"></td>
+            <td><input type="submit" value="Decrypt" onclick="openMenu('2')"></td>
+            <td><input type="submit" value="Hash" onclick="openMenu('3')"></td>
+            <td><input type="button" onclick="location.href='/';" value="Reset" /></td>
+        </tr>
+    </div>
+  
+<!-- 1. Encrypt -->
+    <div id="1" class="menu" style="display:none">
+        <form method="POST" action="/encrypt" >
+
+            <legend>Encrypt</legend><hr>
+            <span><i>algorithm = Advanced Encryption Standard (AES) 256</i></span>
+            <br><br>    
 
             <label>Plaintext:</label>
             <textarea name="data" id ="data" placeholder="plaintext..." class ="input-textarea" rows=4 cols=120 required><%= encryption.data %></textarea>
 
-            
             <label>Secret:</label>
-
             <input type="text" value="<%= encryption.secret %>" name="secret" id ="secret" class="field-small" placeholder="secret" size=50 required>
 
-            <br><br><input type="submit" value="Encrypt"/>
+            <br><br>
+            <input type="submit" value="Encrypt"/>
             <br><br>
 
             <label>Cipher (Encrypted) Text:</label>
             <textarea name="cipher" id ="cipher" class="encrypted" rows=4 cols=120 readonly><%= encryption.cipher %></textarea><br>
+        
+        </form>
+    </div>
 
-        </ul>
-    </form>
 
+<!-- 2. Decrypt -->
+    <div id="2" class="menu" style="display:none">
+        <form method="POST" action="/decrypt" >
 
-    <!-- 2. Decrypt -->
-    <form method="POST" action="/decrypt" >
-
-        <legend>2. Decrypt</legend><hr>
-        <span><i>algorithm = Advanced Encryption Standard (AES) 256</i></span>
-        <ul>
+            <legend>Decrypt</legend><hr>
+            <span><i>algorithm = Advanced Encryption Standard (AES) 256</i></span>
+            <br><br>
 
             <label>Cipher:</label>
-            <textarea name="cipher" id ="cipher" class ="input-textarea" placeholder="cypher..." class ="input-textarea" rows=4 cols=120 required><%= encryption.cipher %></textarea><br>
-
+            <textarea name="cipher" id ="cipher" class ="input-textarea" placeholder="cypher..." class ="input-textarea" rows=4 cols=120 required><%= encryption.cipher %></textarea>
  
             <label>Secret:</label>
-
             <input type="text" name="secret" id ="secret" class="field-small" placeholder ="secret" value="<%- encryption.secret %>" size=50 required >
 
-            <br><br><input type="submit" value="Decrypt" />
+            <br><br>
+            <input type="submit" value="Decrypt" />
             <br><br>
 
             <label>Decrypted Text:</label>
             <textarea name="plaintext" id ="plaintext" rows=4 cols=120 readonly><%= decryption.data %></textarea><br>
 
-        </ul>
-    </form>
- 
+        </form>
+    </div>
 
 
-    <!-- 3. Hash -->
-    <form method="POST" action="/hash" >
+<!-- 3. Hash -->
+    <div id="3" class="menu" style="display:none">
 
-        <legend>3. Hash</legend><hr>
-        <span><i>algorithm = Secure Hash Algorithm 2 (SHA-2) 512</i></span>
-        <ul>
+        <form method="POST" action="/hash" >
+
+            <br>
+            <label>Hash</label><hr>
+            <span><i>algorithm = Secure Hash Algorithm 2 (SHA-2) 512</i></span>
+            <br><br>
+
 
             <label>Plaintext:</label>
-            <textarea name="data" id ="data" class ="input-textarea" placeholder="Plaintext..." class ="input-textarea" rows=4 cols=120 required><%= hashed.data %></textarea><br>
+            <textarea name="data" id ="data" class ="input-textarea" placeholder="Plaintext..." class ="input-textarea" rows=4 cols=120 required><%= hashed.data %></textarea>
 
             <label>Secret:</label>
             <input type="text" name="secret" id ="secret" class="field-small" placeholder ="secret" value="<%- hashed.secret %>" size=50 >
 
-            <br><br><input type="submit" value="Hash" />
+            <br><br>
+            <input type="submit" value="Hash" />
             <br><br>
 
             <label>Hashed Text:</label>
             <textarea name="hashed" id ="hashed" rows=4 cols=120 readonly><%= hashed.hash %></textarea><br>
-
-        </ul>
-    </form>
-    <br>
+        </form>
+        <br>
+    </div>
 
 </div>
 <br>
 <br>
 <br>
+
+
+<script>
+
+    function openMenu(menuItem) {
+        var i;
+        var x = document.getElementsByClassName("menu");
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none"; 
+        }
+        document.getElementById(menuItem).style.display = "block"; 
+    }
+
+
+    function initPage() {
+        var i;
+        var x = document.getElementsByClassName("menu");
+        for (i = 0; i < x.length; i++) {
+            if (i == <%= menuitem %>) {
+                x[i].style.display = "block"; 
+            } else {
+                x[i].style.display = "none"; 
+            }
+        }
+    }
+</script>
+    
 </body>
 </html>
