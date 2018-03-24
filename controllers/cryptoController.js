@@ -122,13 +122,12 @@ module.exports = function (app) {
         var privPem = keys.toPrivatePem('base64');
         var pubPem = keys.toPublicPem('base64');
        
-        cryptodata.rsaEnc.pub = privPem
-        cryptodata.rsaDec.priv = pubPem
+        cryptodata.rsaEnc.pub = pubPem
+        cryptodata.rsaDec.priv = privPem
 
-        crypto.menuItem = 4
+        cryptodata.menuItem = 4
         res.render('./index', {cryptodata: cryptodata})
     })
-
 
 
 // 5. RSA Encryption
@@ -142,64 +141,26 @@ module.exports = function (app) {
         var pub = ursa.createPublicKey(cryptodata.rsaEnc.pub, 'base64')
         cryptodata.rsaEnc.cipher = pub.encrypt(data)
 
-        crypto.menuItem = 5
+        cryptodata.menuItem = 5
         res.render('./index', {cryptodata: cryptodata})
     })
 
 
 // 6. RSA Decryption
-app.post('/rsaDecrypt', urlencodedParser, function (req, res) {
+    app.post('/rsaDecrypt', urlencodedParser, function (req, res) {
 
-    cryptodata.rsaDec.priv = req.body.priv
+        cryptodata.rsaDec.priv = req.body.priv
 
-    // copy the cipher binary data as the body encoding will mess the binary up
-    cryptodata.rsaDec.cipher = cryptodata.rsaEnc.cipher
-            
-    // decrypt, with the private key
-    var priv = ursa.createPrivateKey(cryptodata.rsaDec.priv, '', 'base64')
-    rsadecrypt.data = priv.decrypt(rsadecrypt.cipher).toString('ascii')
+        // copy the cipher binary data as the body encoding will mess the binary up
+        cryptodata.rsaDec.cipher = cryptodata.rsaEnc.cipher
+                
+        // decrypt, with the private key
+        var priv = ursa.createPrivateKey(cryptodata.rsaDec.priv, '', 'base64')
+        cryptodata.rsaDec.data = priv.decrypt(cryptodata.rsaDec.cipher).toString('ascii')
 
-    res.render('./index', {encryption: encryption, decryption: decryption, hashed: hashed, rsaencrypt: rsaencrypt, rsadecrypt: rsadecrypt, menuitem: 6})
-
-})
-
-
-
-
-// 00. RSA Key Generation
-app.get('/test', urlencodedParser, function (req, res) {
-
-    
-    // create a pair of keys (a private key contains both keys...)
-    var keys = ursa.generatePrivateKey();
-    console.log('keys:', keys);
-    
-    // reconstitute the private key from a base64 encoding
-    var privPem = keys.toPrivatePem('base64');
-    var priv = ursa.createPrivateKey(privPem, '', 'base64');
-    var pubPem = keys.toPublicPem('base64');
-    var pub = ursa.createPublicKey(pubPem, 'base64');
-    var data = new Buffer('hello world');
-    var enc = pub.encrypt(data);
-    var unenc = priv.decrypt(enc);
-
-    // /////////////////////////////////////
-    var keys = ursa.generatePrivateKey()
-    var privPem = keys.toPrivatePem('base64');
-    var priv = ursa.createPrivateKey(privPem, '', 'base64')
-    var pubPem = keys.toPublicPem('base64');
-    var data = new Buffer("test")
-    var pub = ursa.createPublicKey(pubPem, 'base64')
-    var cipher = pub.encrypt(data)
-    var plaintext = priv.decrypt(cipher)
-
-    console.log(plaintext)
-
-res.render('./index', {encryption: encryption, decryption: decryption, hashed: hashed, rsa: rsa, menuitem: 0})
-
-})
-
-
+        cryptodata.menuItem = 6
+        res.render('./index', {cryptodata: cryptodata})
+    })
 
 
 // EOL
