@@ -1,105 +1,105 @@
 <html>
 <head><link rel="stylesheet" type="text/css" href="/assets/styles.css"/></head>
 
-<body onload="menuOption(<%= menuitem %>)" style="background-color: rgb(229, 245, 250);">
-<title>Crypto Demo</title>
-<div class="simple-style" >
+<body class="simple-style" onload="menuOption(<%= cryptodata.menuItem %>)">
+
+    <title>Crypto Demo</title>
+
 
     <div class ="headerdiv">
         <h2>Crypto Demo</h2><hr>
-        <input class ="menu-button" type="submit" value ="Encrypt" onclick="menuOption('1')">
-        <input class ="menu-button" type="submit" value="Decrypt" onclick="menuOption('2')">
-        <input class ="menu-button" type="submit" value="Hash" onclick="menuOption('3')">
+        <input class ="menu-button" type="submit" value ="AES Encrypt" onclick="menuOption('1')">
+        <input class ="menu-button" type="submit" value="AES Decrypt" onclick="menuOption('2')">
+        <input class ="menu-button" type="submit" value="SHA2 Hash" onclick="menuOption('3')">
         <input class ="menu-button" type="submit" value="RSA Keys" onclick="menuOption('4')">
         <input class ="menu-button" type="submit" value="RSA Encrypt" onclick="menuOption('5')">
         <input class ="menu-button" type="submit" value="RSA Decrypt" onclick="menuOption('6')">
         <input type="button" onclick="location.href='/';" value="Reset" />
     </div>
-  
-<!-- 1. Encrypt -->
+
+<!-- 1. AES Encrypt -->
     <div id="1" class="menu-div" style="display:none">
         <form method="POST" action="/encrypt" >
 
-            <legend>Encrypt</legend><hr>
+            <legend>AES Encrypt</legend><hr>
             <span><i>algorithm = Advanced Encryption Standard (AES) 256</i></span>
             <br><br>    
 
             <label>Plaintext:</label>
-            <textarea name="data" id ="data" placeholder="plaintext" class ="input-textarea" rows=4 cols=120 required><%= encryption.data %></textarea>
+            <textarea name="data" id ="data" placeholder="plaintext" rows=4 cols=120 required><%= cryptodata.aesEnc.data %></textarea>
 
             <label>Secret:</label>
-            <input type="text" value="<%= encryption.secret %>" name="secret" id ="secret" class="field-small" placeholder="secret" size=50 required>
+            <input type="text" value="<%= cryptodata.aesEnc.secret %>" name="secret" id ="secret" placeholder="secret" size=50 required>
 
             <br><br>
             <input type="submit" value="Encrypt"/>
             <br><br>
 
             <label>Cipher (Encrypted) Text:</label>
-            <textarea name="cipher" id ="cipher" class="encrypted" rows=4 cols=120 readonly><%= encryption.cipher %></textarea><br>
+            <textarea name="cipher" id ="cipher" rows=4 cols=120 readonly><%= cryptodata.aesEnc.cipher %></textarea><br>
         
         </form>
     </div>
 
 
-<!-- 2. Decrypt -->
+<!-- 2. AES Decrypt -->
     <div id="2" class="menu-div" style="display:none">
         <form method="POST" action="/decrypt" >
 
-            <legend>Decrypt</legend><hr>
+            <legend>AES Decrypt</legend><hr>
             <span><i>algorithm = Advanced Encryption Standard (AES) 256</i></span>
             <br><br>
 
             <label>Cipher:</label>
-            <textarea name="cipher" id ="cipher" class ="input-textarea" placeholder="cypher..." class ="input-textarea" rows=4 cols=120 required><%= encryption.cipher %></textarea>
+            <textarea name="cipher" id ="cipher" rows=4 cols=120 required><%= cryptodata.aesEnc.cipher %></textarea>
  
             <label>Secret:</label>
-            <input type="text" name="secret" id ="secret" class="field-small" placeholder ="secret" value="<%- encryption.secret %>" size=50 required >
+            <input type="text" name="secret" id ="secret" placeholder ="secret" value="<%- cryptodata.aesEnc.secret %>" size=50 required >
 
             <br><br>
             <input type="submit" value="Decrypt" />
             <br><br>
 
             <label>Decrypted Text:</label>
-            <textarea name="plaintext" id ="plaintext" rows=4 cols=120 readonly><%= decryption.data %></textarea><br>
+            <textarea name="plaintext" id ="plaintext" rows=4 cols=120 readonly><%= cryptodata.aesDec.data %></textarea><br>
 
         </form>
     </div>
 
 
-<!-- 3. Hash -->
+<!-- 3. SHA2 Hash -->
     <div id="3" class="menu-div" style="display:none">
 
         <form method="POST" action="/hash" >
 
-            <legend>Hash</legend><hr>
+            <legend>SHA2 Hash</legend><hr>
             <span><i>algorithm = Secure Hash Algorithm 2 (SHA-2) 512</i></span>
             <br><br>
 
             <label>Plaintext:</label>
-            <textarea name="data" id ="data" class ="input-textarea" placeholder="plaintext" class ="input-textarea" rows=4 cols=120 required><%= hashed.data %></textarea>
+            <textarea name="data" id ="data" placeholder="plaintext" rows=4 cols=120 required><%= cryptodata.shaHash.data %></textarea>
 
             <label>Secret:</label>
-            <input type="text" name="secret" id ="secret" class="field-small" placeholder ="secret" value="<%- hashed.secret %>" size=50 >
+            <input type="text" name="secret" id ="secret" placeholder ="secret" value="<%- cryptodata.shaHash.secret %>" size=50 >
 
             <br><br>
             <input type="submit" value="Hash" />
             <br><br>
 
             <label>Hashed Text:</label>
-            <textarea name="hashed" id ="hashed" rows=4 cols=120 readonly><%= hashed.hash %></textarea><br>
+            <textarea name="hashed" id ="hashed" rows=4 cols=120 readonly><%= cryptodata.shaHash.hash %></textarea><br>
         </form>
         <br>
     </div>
 
 
-<!-- 4. RSA - Generate Keys -->
+<!-- 4. RSA Keygen / Load -->
     <div id="4" class="menu-div" style="display:none">
 
         <form method="POST" action="/rsaKeys" >
 
             <br>
             <label>Generate RSA Keys</label><hr>
-            <!-- <span><i>algorithm = RSA</i></span> -->
             <br>
 
             <input type="submit" value="Generate Keys" />
@@ -107,18 +107,18 @@
         
             <label>Private Key:</label>
             <span><i>Privacy-enhanced Electronic Mail - PEM):</i></span>
-            <textarea name="priv" id ="priv" class ="input-textarea" placeholder="private key" rows=24 cols=120 readonly><%= rsadecrypt.priv %></textarea>
+            <textarea name="priv" id ="priv"  placeholder="private key" rows=24 cols=120 readonly><%= cryptodata.rsaDec.priv %></textarea>
 
             <br>
             <label>Public Key:</label>
             <span><i>Privacy-enhanced Electronic Mail - PEM):</i></span>
-            <textarea name="pub" id ="pub" class ="input-textarea" placeholder="public key" rows=10 cols=120 readonly><%= rsaencrypt.pub %></textarea>
+            <textarea name="pub" id ="pub" placeholder="public key" rows=10 cols=120 readonly><%= cryptodata.rsaEnc.pub %></textarea>
         </form>
         <br>
     </div>
 
 
-<!-- 5. RSA - Encrypt -->
+<!-- 5. RSA Encrypt -->
     <div id="5" class="menu-div" style="display:none">
 
         <form method="POST" action="/rsaEncrypt" >
@@ -129,16 +129,16 @@
             <br>
 
             <label>Plaintext:</label>
-            <textarea name="data" id ="data" placeholder="plaintext" class ="input-textarea" rows=4 cols=120 required><%= rsaencrypt.data %></textarea>
+            <textarea name="data" id ="data" placeholder="plaintext" rows=4 cols=120 required><%= cryptodata.rsaEnc.data %></textarea>
 
             <label>Public Key:</label>
-            <textarea name="pub" id ="pub" class ="input-textarea" placeholder="public key" rows=12 cols=120 required><%= rsaencrypt.pub %></textarea>
+            <textarea name="pub" id ="pub" placeholder="public key" rows=12 cols=120 required><%= cryptodata.rsaEnc.pub %></textarea>
 
             <input type="submit" value="Encrypt" />
             <br><br>
 
             <label>Cipher (Encrypted) Text:</label>
-            <textarea name="cipher" id ="cipher" rows=8 cols=120 readonly><%= rsaencrypt.cipher %></textarea><br>
+            <textarea name="cipher" id ="cipher" rows=8 cols=120 readonly><%= cryptodata.rsaEnc.cipher %></textarea><br>
         
         </form>
         <br>
@@ -146,7 +146,7 @@
 
 
 
-<!-- 6. RSA - Decrypt -->
+<!-- 6. RSA Decrypt -->
     <div id="6" class="menu-div" style="display:none">
 
         <form method="POST" action="/rsaDecrypt" >
@@ -157,29 +157,26 @@
             <br>
 
             <label>Private Key:</label>
-            <textarea name="priv" id ="priv" class ="input-textarea" placeholder="private key" rows=24 cols=120 required><%= rsadecrypt.priv %></textarea>
+            <textarea name="priv" id ="priv" placeholder="private key" rows=24 cols=120 required><%= cryptodata.rsaDec.priv %></textarea>
 
             <label>Cipher (Encrypted) Text:</label>
-            <textarea name="cipher" id ="cipher" class="input-textarea" rows=8 cols=120 required><%= rsaencrypt.cipher %></textarea><br>
+            <textarea name="cipher" id ="cipher" rows=8 cols=120 required><%= cryptodata.rsaEnc.cipher %></textarea><br>
         
             <input type="submit" value="Decrypt" />
             <br><br>
 
             <label>Plaintext:</label>
-            <textarea name="data" id ="data" placeholder="plaintext" rows=4 cols=120 readonly><%= rsadecrypt.data %></textarea>
+            <textarea name="data" id ="data" placeholder="plaintext" rows=4 cols=120 readonly><%= cryptodata.rsaDec.data %></textarea>
 
         </form>
         <br>
     </div>
 
-
-
-</div>
 <br>
 <br>
 <br>
 
-
+<!-- menu nav -->
 <script>
     function menuOption(activeOption) {
 
