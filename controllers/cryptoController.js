@@ -7,11 +7,13 @@ module.exports = function (app) {
     var crypto = require('crypto')
     
 // init vars
-    var encryption = { data: "", secret: "", cipher: "" }  
-    var decryption = { data: "", secret: "", cipher: "" }
-    var hashed = { data: "", secret: "", hash: "" }
-    var rsaencrypt = { pub: "", data: "", cipher: "" }
-    var rsadecrypt = { priv: "", data: "", cipher: "" }
+    var crypto = {
+        AESenc : { data: "", secret: "", cipher: "" },  
+        AESdec : { cipher: "", secret: "", data: "" },
+        SHAhash : { data: "", secret: "", hash: "" },
+        RSAenc : { pub: "", data: "", cipher: "" },
+        RSAdec : { priv: "", data: "", cipher: "" }
+    }
 
 // encryption helper function
     function encrypt_helper(encryption, callback) {
