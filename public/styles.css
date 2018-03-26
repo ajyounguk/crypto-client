@@ -56,6 +56,16 @@
     font-weight : bold;
 }
 
+
+.simple-style h4 {
+    margin : 0 0 3px 0;
+    padding : 15px 0px 0px 5px;
+    display : block;
+    font-weight : bold;
+}
+
+
+
 .simple-style li {
     padding : 0;
     display : block;

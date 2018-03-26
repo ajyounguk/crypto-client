@@ -50,7 +50,6 @@ module.exports = function (app) {
         cryptodata.shaHash.hash = hash.digest('hex') 
 
         callback (cryptodata)
-
     }
 
 
@@ -135,11 +134,14 @@ module.exports = function (app) {
 
         cryptodata.rsaEnc.data = req.body.data
         cryptodata.rsaEnc.pub = req.body.pub
+
+        // reset decryption plaintext so it doesn't show old results
+        cryptodata.rsaDec.data = ""
                 
         // encrypt, with the public key
         var data = new Buffer(cryptodata.rsaEnc.data)
         var pub = ursa.createPublicKey(cryptodata.rsaEnc.pub, 'base64')
-        cryptodata.rsaEnc.cipher = pub.encrypt(data)
+        cryptodata.rsaEnc.cipher = pub.encrypt(data,'utf8', 'base64')
 
         cryptodata.menuItem = 5
         res.render('./index', {cryptodata: cryptodata})
@@ -150,13 +152,11 @@ module.exports = function (app) {
     app.post('/rsaDecrypt', urlencodedParser, function (req, res) {
 
         cryptodata.rsaDec.priv = req.body.priv
-
-        // copy the cipher binary data as the body encoding will mess the binary up
-        cryptodata.rsaDec.cipher = cryptodata.rsaEnc.cipher
+        cryptodata.rsaDec.cipher = req.body.cipher
                 
         // decrypt, with the private key
-        var priv = ursa.createPrivateKey(cryptodata.rsaDec.priv, '', 'base64')
-        cryptodata.rsaDec.data = priv.decrypt(cryptodata.rsaDec.cipher).toString('ascii')
+        var priv = ursa.createPrivateKey(cryptodata.rsaDec.priv, 'utf8', 'base64')
+        cryptodata.rsaDec.data = priv.decrypt(cryptodata.rsaDec.cipher, 'base64')
 
         cryptodata.menuItem = 6
         res.render('./index', {cryptodata: cryptodata})
