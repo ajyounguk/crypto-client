@@ -1,0 +1,32 @@
+
+<!-- menu nav -->
+<script>
+    function menuOption(activeOption) {
+
+        activeOption--;
+        var i;
+        var activediv = document.getElementsByClassName("menu-div");
+        var activebutton = document.getElementsByClassName("menu-button");
+
+        for (i = 0; i < activediv.length; i++) {
+            if (i == activeOption) {    
+                activediv[i].style.display = "block"; 
+                activebutton[i].style.background = "rgb(0, 9, 12)";
+            } else {
+                activediv[i].style.display  = "none"; 
+                activebutton[i].style.background = "";
+            }
+        }
+    }
+</script>
+    
+    <div class ="headerdiv">
+        <h2>Crypto Demo</h2><hr>
+        <input class ="menu-button" type="submit" value ="AES Encrypt" onclick="menuOption('1')">
+        <input class ="menu-button" type="submit" value="AES Decrypt" onclick="menuOption('2')">
+        <input class ="menu-button" type="submit" value="SHA2 Hash" onclick="menuOption('3')">
+        <input class ="menu-button" type="submit" value="RSA Keys" onclick="menuOption('4')">
+        <input class ="menu-button" type="submit" value="RSA Encrypt" onclick="menuOption('5')">
+        <input class ="menu-button" type="submit" value="RSA Decrypt" onclick="menuOption('6')">
+        <input type="button" onclick="location.href='/';" value="Reset" />
+    </div>

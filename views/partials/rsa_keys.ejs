@@ -1,0 +1,24 @@
+<!-- 4. RSA Keygen / Load -->
+    <div id="4" class="menu-div" style="display:none">
+
+        <form method="POST" action="/rsaKeys" >
+
+            
+            <h4>Generate RSA Keys</h4><hr>
+            <span><i>Rivest–Shamir–Adleman (RSA)</i></span>
+            <br>
+
+            <input type="submit" value="Generate Keys" />
+            <br><br>
+        
+            <label>Private Key:</label>
+            <span><i>Privacy-enhanced Electronic Mail - PEM):</i></span>
+            <textarea name="priv" id ="rsaKey.priv"  placeholder="private key" rows=24 cols=120 readonly><%= cryptodata.rsaDec.priv %></textarea>
+
+            <br>
+            <label>Public Key:</label>
+            <span><i>Privacy-enhanced Electronic Mail - PEM):</i></span>
+            <textarea name="pub" id ="rsaKey.pub" placeholder="public key" rows=10 cols=120 readonly><%= cryptodata.rsaEnc.pub %></textarea>
+        </form>
+        <br>
+    </div>

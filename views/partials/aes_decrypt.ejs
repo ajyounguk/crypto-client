@@ -1,0 +1,25 @@
+<!-- 2. AES Decrypt -->
+    <div id="2" class="menu-div" style="display:none">
+        <form method="POST" action="/decrypt" >
+
+            <h4>AES Decrypt</h4><hr>
+            <span><i>algorithm = Advanced Encryption Standard (AES) 256</i></span>
+            <br><br>
+
+            <label>Cipher:</label>
+            <textarea name="cipher" id ="aesDec.cipher" rows=4 cols=120 required><%= cryptodata.aesEnc.cipher %></textarea>
+ 
+            <label>Secret:</label>
+            <input type="text" name="secret" id ="aesDec.secret" placeholder ="secret" value="<%- cryptodata.aesEnc.secret %>" size=50 required >
+            <br><br>
+
+            <input type="submit" value="Decrypt" />
+            <br><br>
+
+            <label>Decrypted Text:</label>
+            <textarea name="plaintext" id ="aesDec.plaintext" rows=4 cols=120 readonly><%= cryptodata.aesDec.data %></textarea><br>
+
+        </form>
+    </div>
+
+

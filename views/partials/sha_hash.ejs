@@ -1,0 +1,25 @@
+<!-- 3. SHA2 Hash -->
+    <div id="3" class="menu-div" style="display:none">
+
+        <form method="POST" action="/hash" >
+
+            <h4>SHA2 Hash</h4><hr>
+            <span><i>algorithm = Secure Hash Algorithm 2 (SHA-2) 512</i></span>
+            <br><br>
+
+            <label>Plaintext:</label>
+            <textarea name="data" id ="sha2.data" placeholder="plaintext" rows=4 cols=120 required><%= cryptodata.shaHash.data %></textarea>
+
+            <label>Secret:</label>
+            <input type="text" name="secret" id ="sha2.secret" placeholder ="secret" value="<%- cryptodata.shaHash.secret %>" size=50 >
+            <br><br>
+            
+            <input type="submit" value="Hash" />
+            <br><br>
+
+            <label>Hashed Text:</label>
+            <textarea name="hashed" id ="sha2.hashed" rows=4 cols=120 readonly><%= cryptodata.shaHash.hash %></textarea><br>
+        </form>
+        <br>
+    </div>
+    

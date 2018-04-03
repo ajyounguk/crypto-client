@@ -1,0 +1,23 @@
+<!-- 1. AES Encrypt -->
+    <div id="1" class="menu-div" style="display:none">
+        <form method="POST" action="/encrypt" >
+
+            <h4>AES Encrypt</h4><hr>
+            <span><i>algorithm = Advanced Encryption Standard (AES) 256</i></span>
+            <br><br>    
+
+            <label>Plaintext:</label>
+            <textarea name="data" id ="aesEnc.data" placeholder="plaintext" rows=4 cols=120 required><%= cryptodata.aesEnc.data %></textarea>
+
+            <label>Secret:</label>
+            <input type="text" value="<%= cryptodata.aesEnc.secret %>" name="secret" id ="aesEnc.secret" placeholder="secret" size=50 required>
+            <br><br>
+
+            <input type="submit" value="Encrypt"/>
+            <br><br>
+
+            <label>Cipher (Encrypted) Text:</label>
+            <textarea name="cipher" id ="aesEnc.cipher" rows=4 cols=120 readonly><%= cryptodata.aesEnc.cipher %></textarea><br>
+
+        </form>
+    </div>

@@ -1,0 +1,24 @@
+<!-- 5. RSA Encrypt -->
+    <div id="5" class="menu-div" style="display:none">
+
+        <form method="POST" action="/rsaEncrypt" >
+
+            <h4>RSA Encrypt</h4><hr>
+            <span><i>Rivest–Shamir–Adleman (RSA)</i></span>
+            <br>
+
+            <label>Plaintext:</label>
+            <textarea name="data" id ="rsaEnc.data" placeholder="plaintext" rows=4 cols=120 required><%= cryptodata.rsaEnc.data %></textarea>
+
+            <label>Public Key:</label>
+            <textarea name="pub" id ="rsaEnc.pub" placeholder="public key" rows=12 cols=120 required><%= cryptodata.rsaEnc.pub %></textarea>
+
+            <input type="submit" value="Encrypt" />
+            <br><br>
+
+            <label>Cipher (Encrypted) Text:</label>
+            <textarea name="cipher" id ="rsaEnc.cipher" rows=8 cols=120 readonly><%= cryptodata.rsaEnc.cipher %></textarea><br>
+        
+        </form>
+        <br>
+    </div>

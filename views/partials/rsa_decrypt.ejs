@@ -1,0 +1,24 @@
+<!-- 6. RSA Decrypt -->
+    <div id="6" class="menu-div" style="display:none">
+
+        <form method="POST" action="/rsaDecrypt" >
+
+            <h4>RSA Decrypt</h4><hr>
+            <span><i>Rivest–Shamir–Adleman (RSA)</i></span>
+            <br>
+
+            <label>Private Key:</label>
+            <textarea name="priv" id ="rsaDec.priv" placeholder="private key" rows=24 cols=120 required><%= cryptodata.rsaDec.priv %></textarea>
+
+            <label>Cipher (Encrypted) Text:</label>
+            <textarea name="cipher" id ="rsaDec.cipher" rows=8 cols=120 required><%= cryptodata.rsaEnc.cipher %></textarea><br>
+        
+            <input type="submit" value="Decrypt" />
+            <br><br>
+
+            <label>Plaintext:</label>
+            <textarea name="data" id ="rsaDec.data" placeholder="plaintext" rows=4 cols=120 readonly><%= cryptodata.rsaDec.data %></textarea>
+
+        </form>
+        <br>
+    </div>
