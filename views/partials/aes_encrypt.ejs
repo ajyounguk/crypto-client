@@ -2,12 +2,12 @@
     <div id="1" class="menu-div" style="display:none">
         <form method="POST" action="/encrypt" >
 
-            <h4>AES Encrypt</h4><hr>
+            <label>AES Encrypt</label><hr>
             <span><i>algorithm = Advanced Encryption Standard (AES) 256</i></span>
             <br><br>    
 
             <label>Plaintext:</label>
-            <textarea name="data" id ="aesEnc.data" placeholder="plaintext" rows=4 cols=120 required><%= cryptodata.aesEnc.data %></textarea>
+            <textarea name="data" id ="aesEnc.data" placeholder="plaintext" rows=4 cols=120 required><%= cryptodata.aesEnc.data %></textarea><br>
 
             <label>Secret:</label>
             <input type="text" value="<%= cryptodata.aesEnc.secret %>" name="secret" id ="aesEnc.secret" placeholder="secret" size=50 required>

@@ -3,12 +3,12 @@
 
         <form method="POST" action="/hash" >
 
-            <h4>SHA2 Hash</h4><hr>
+            <label>SHA2 Hash</label><hr>
             <span><i>algorithm = Secure Hash Algorithm 2 (SHA-2) 512</i></span>
             <br><br>
 
             <label>Plaintext:</label>
-            <textarea name="data" id ="sha2.data" placeholder="plaintext" rows=4 cols=120 required><%= cryptodata.shaHash.data %></textarea>
+            <textarea name="data" id ="sha2.data" placeholder="plaintext" rows=4 cols=120 required><%= cryptodata.shaHash.data %></textarea><br>
 
             <label>Secret:</label>
             <input type="text" name="secret" id ="sha2.secret" placeholder ="secret" value="<%- cryptodata.shaHash.secret %>" size=50 >

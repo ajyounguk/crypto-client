@@ -2,12 +2,12 @@
     <div id="2" class="menu-div" style="display:none">
         <form method="POST" action="/decrypt" >
 
-            <h4>AES Decrypt</h4><hr>
+            <label>AES Decrypt</label><hr>
             <span><i>algorithm = Advanced Encryption Standard (AES) 256</i></span>
             <br><br>
 
             <label>Cipher:</label>
-            <textarea name="cipher" id ="aesDec.cipher" rows=4 cols=120 required><%= cryptodata.aesEnc.cipher %></textarea>
+            <textarea name="cipher" id ="aesDec.cipher" rows=4 cols=120 required><%= cryptodata.aesEnc.cipher %></textarea><br>
  
             <label>Secret:</label>
             <input type="text" name="secret" id ="aesDec.secret" placeholder ="secret" value="<%- cryptodata.aesEnc.secret %>" size=50 required >
