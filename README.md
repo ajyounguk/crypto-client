@@ -1,9 +1,9 @@
 # Plaintext Encryption/Decryption Demo
 
 ## What is this?
-This application provides a Node.js webserver, and a html interface to demonstrate the principles of encryption, decryption and hashing with AES, SHA2 and RSA.
+A demo client to illustrate encryption, decryption and hashing functions with AES, SHA2 and RSA.
 
-![Alt text](/screenshots/rsakeys.png)
+![Alt text](/screenshots/encrypt.png)
 
 
 
