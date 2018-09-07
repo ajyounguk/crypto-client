@@ -4,6 +4,7 @@
 A demo client to illustrate encryption, decryption and hashing functions with AES, SHA2 and RSA.
 
 ![Alt text](/screenshots/encrypt.png)
+![Alt text](/screenshots/sha2hash.png)
 
 
 
