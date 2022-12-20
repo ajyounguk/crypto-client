@@ -1,9 +1,10 @@
 # Plaintext Encryption/Decryption Demo
+##
+## ursa dependency is not building on Windows 11 - this app may not work at all as at 20-12-2022 
 
 ## What is this?
 A demo client to illustrate encryption, decryption and hashing functions with AES, SHA2 and RSA.
 
-** ursa dependency is not building on Windows 11 - this app may not work at all as at 20-12-2022 **
 
 ![Alt text](/screenshots/sha2hash.png)
 
