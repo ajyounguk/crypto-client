@@ -1,0 +1,12 @@
+<nav class="sidebar" aria-label="Operations">
+<% let group; for (const op of ops) { if (op.group !== group) { if (group) { %></ul><% } group = op.group %>
+    <h2 class="nav-group"><%= group %></h2>
+    <ul class="nav-list">
+<% } %>
+        <li><a class="nav-link" href="/?tab=<%= op.id %>"<% if (active && op.id === active.id) { %> aria-current="page"<% } %>><%= op.label %></a></li>
+<% } %>
+    </ul>
+    <form class="nav-reset" method="POST" action="/reset" data-confirm="Clear all inputs, keys and results for this browser session?">
+        <button type="submit" class="btn btn-danger btn-block">Reset session</button>
+    </form>
+</nav>

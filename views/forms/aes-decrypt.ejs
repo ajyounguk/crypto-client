@@ -1,0 +1,14 @@
+<h2 id="op-title">AES Decrypt</h2>
+<p class="op-desc">Reverses AES Encrypt. GCM's auth tag means a wrong secret or a tampered cipher text is detected and rejected rather than producing garbage.</p>
+
+<form method="POST" action="/decrypt" class="op-form">
+    <label for="aes-dec-cipher">Cipher text (hex)</label>
+    <textarea id="aes-dec-cipher" name="cipher" rows="4" placeholder="Output from AES Encrypt" required spellcheck="false" class="mono"><%= forms.aesDecrypt.cipher %></textarea>
+
+    <label for="aes-dec-secret">Secret</label>
+    <input id="aes-dec-secret" name="secret" type="text" value="<%= forms.aesDecrypt.secret %>" placeholder="Passphrase" required autocomplete="off" spellcheck="false">
+
+    <div class="actions"><button type="submit" class="btn btn-primary">Decrypt</button></div>
+</form>
+
+<%- include('../partials/result', { outputLabel: 'Plaintext' }) %>

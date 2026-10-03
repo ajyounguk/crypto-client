@@ -1,0 +1,16 @@
+<%- include('partials/header', { pageTitle: title }) %>
+<div class="layout layout-narrow">
+    <main class="content">
+        <section class="response is-error" aria-labelledby="error-title">
+            <div class="response-head">
+                <h1 id="error-title"><%= title %></h1>
+                <span class="status-badge status-error"><%= status %></span>
+            </div>
+            <p class="error-message"><%= message %></p>
+            <p><a class="btn" href="/">Back to Crypto Client</a></p>
+            <footer class="response-foot">Request ID <code><%= requestId %></code></footer>
+        </section>
+    </main>
+</div>
+</body>
+</html>

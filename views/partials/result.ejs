@@ -1,0 +1,29 @@
+<% if (result) { %>
+<section class="response <%= !result.ok ? 'is-error' : result.verdict === 'invalid' ? 'is-invalid' : 'is-ok' %>" aria-labelledby="response-title" aria-live="polite">
+    <div class="response-head">
+        <h3 id="response-title">Response</h3>
+        <span class="status-badge status-<%= result.ok ? 'ok' : 'error' %>"><%= result.status %> <%= result.statusText %></span>
+        <% if (result.verdict) { %><span class="verdict verdict-<%= result.verdict %>"><%= result.verdict === 'valid' ? '✓ VALID' : '✗ INVALID' %></span><% } %>
+        <span class="response-time"><%= result.durationMs %> ms</span>
+    </div>
+
+    <% if (result.details && result.details.tampered) { const t = result.details.tampered %>
+    <p class="tamper-note">Tampered before verifying: <% if (t.part === 'message') { %>message character <%= t.position + 1 %> changed <code><%= t.from || '(none)' %></code> → <code><%= t.to %></code><% } else { %>signature byte <%= t.byte %> changed <code><%= t.from %></code> → <code><%= t.to %></code> (one bit flipped)<% } %>. The form above now holds the tampered value.</p>
+    <% } %>
+
+    <div class="response-block">
+        <div class="block-head">
+            <span class="block-label"><%= result.ok ? outputLabel : 'Error' %></span>
+            <button type="button" class="btn btn-ghost btn-sm" data-copy="#response-output">Copy</button>
+        </div>
+        <pre id="response-output" class="output <%= result.ok ? '' : 'output-error' %>"><%= result.output %></pre>
+    </div>
+
+    <details class="response-block" open>
+        <summary class="block-label">Details</summary>
+        <pre class="json" data-json><%= JSON.stringify(result.details, null, 2) %></pre>
+    </details>
+
+    <footer class="response-foot">Request ID <code><%= result.requestId %></code></footer>
+</section>
+<% } %>

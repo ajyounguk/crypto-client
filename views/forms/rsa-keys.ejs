@@ -1,0 +1,14 @@
+<h2 id="op-title">RSA Keys</h2>
+<p class="op-desc">Generates a 2048-bit RSA key pair in PEM format. The public key encrypts, the private key decrypts. The new keys are filled into RSA Encrypt and RSA Decrypt.</p>
+
+<form method="POST" action="/rsaKeys" class="op-form"<% if (forms.rsaKeys.privateKey) { %> data-confirm="Replace the current key pair? Anything encrypted with the old public key can't be decrypted with the new private key."<% } %>>
+    <div class="actions"><button type="submit" class="btn btn-primary">Generate key pair</button></div>
+
+    <label for="rsa-key-pub">Public key <span class="optional">(PEM / SPKI)</span></label>
+    <textarea id="rsa-key-pub" rows="9" readonly class="mono" placeholder="Generate a key pair to see it here"><%= forms.rsaKeys.publicKey %></textarea>
+
+    <label for="rsa-key-priv">Private key <span class="optional">(PEM / PKCS#8)</span></label>
+    <textarea id="rsa-key-priv" rows="12" readonly class="mono" placeholder="Generate a key pair to see it here"><%= forms.rsaKeys.privateKey %></textarea>
+</form>
+
+<%- include('../partials/result', { outputLabel: 'Public key' }) %>

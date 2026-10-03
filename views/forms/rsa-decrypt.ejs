@@ -1,0 +1,14 @@
+<h2 id="op-title">RSA Decrypt</h2>
+<p class="op-desc">Reverses RSA Encrypt using the matching private key.</p>
+
+<form method="POST" action="/rsaDecrypt" class="op-form">
+    <label for="rsa-dec-cipher">Cipher text (base64)</label>
+    <textarea id="rsa-dec-cipher" name="cipher" rows="5" placeholder="Output from RSA Encrypt" required spellcheck="false" class="mono"><%= forms.rsaDecrypt.cipher %></textarea>
+
+    <label for="rsa-dec-priv">Private key</label>
+    <textarea id="rsa-dec-priv" name="priv" rows="12" placeholder="-----BEGIN PRIVATE KEY-----" required spellcheck="false" class="mono"><%= forms.rsaDecrypt.priv %></textarea>
+
+    <div class="actions"><button type="submit" class="btn btn-primary">Decrypt</button></div>
+</form>
+
+<%- include('../partials/result', { outputLabel: 'Plaintext' }) %>

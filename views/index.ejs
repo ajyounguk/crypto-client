@@ -1,25 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <link rel="stylesheet" type="text/css" href="/assets/styles.css"/>
-    <title>Crypto Client</title>
-</head>
+<%- include('partials/header', { pageTitle: active.label }) %>
+<div class="layout">
+    <%- include('partials/sidebar') %>
 
-<body class="simple-style" onload="menuOption(<%= cryptodata.menuItem %>)">
-
-<% include ./partials/menunav.ejs %>
-
-<% include ./partials/aes_encrypt.ejs %>
-<% include ./partials/aes_decrypt.ejs %>
-<% include ./partials/sha_hash.ejs %>
-<% include ./partials/rsa_keys.ejs %>
-<% include ./partials/rsa_encrypt.ejs %>
-<% include ./partials/rsa_decrypt.ejs %>
-
-<br>
-<br>
-<br>
-
+    <main class="content">
+        <section class="card" aria-labelledby="op-title">
+            <%- include('forms/' + active.id) %>
+        </section>
+    </main>
+</div>
 </body>
 </html>
-

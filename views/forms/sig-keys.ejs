@@ -1,0 +1,14 @@
+<h2 id="op-title">Signing Keys</h2>
+<p class="op-desc">Generates an Ed25519 key pair for digital signatures. The private key signs, the public key lets anyone check the signature. The new keys are filled into Sign and Verify.</p>
+
+<form method="POST" action="/sigKeys" class="op-form"<% if (forms.sigKeys.privateKey) { %> data-confirm="Replace the current signing key pair? Signatures made with the old key won't verify against the new public key."<% } %>>
+    <div class="actions"><button type="submit" class="btn btn-primary">Generate key pair</button></div>
+
+    <label for="sig-key-pub">Public key <span class="optional">(PEM / SPKI)</span></label>
+    <textarea id="sig-key-pub" rows="3" readonly class="mono" placeholder="Generate a key pair to see it here"><%= forms.sigKeys.publicKey %></textarea>
+
+    <label for="sig-key-priv">Private key <span class="optional">(PEM / PKCS#8)</span></label>
+    <textarea id="sig-key-priv" rows="3" readonly class="mono" placeholder="Generate a key pair to see it here"><%= forms.sigKeys.privateKey %></textarea>
+</form>
+
+<%- include('../partials/result', { outputLabel: 'Public key' }) %>
