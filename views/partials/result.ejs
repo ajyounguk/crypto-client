@@ -1,0 +1,24 @@
+<% if (result) { %>
+<section class="response <%= result.ok ? 'is-ok' : 'is-error' %>" aria-labelledby="response-title" aria-live="polite">
+    <div class="response-head">
+        <h3 id="response-title">Response</h3>
+        <span class="status-badge status-<%= result.ok ? 'ok' : 'error' %>"><%= result.status %> <%= result.statusText %></span>
+        <span class="response-time"><%= result.durationMs %> ms</span>
+    </div>
+
+    <div class="response-block">
+        <div class="block-head">
+            <span class="block-label"><%= result.ok ? outputLabel : 'Error' %></span>
+            <button type="button" class="btn btn-ghost btn-sm" data-copy="#response-output">Copy</button>
+        </div>
+        <pre id="response-output" class="output <%= result.ok ? '' : 'output-error' %>"><%= result.output %></pre>
+    </div>
+
+    <details class="response-block" open>
+        <summary class="block-label">Details</summary>
+        <pre class="json" data-json><%= JSON.stringify(result.details, null, 2) %></pre>
+    </details>
+
+    <footer class="response-foot">Request ID <code><%= result.requestId %></code></footer>
+</section>
+<% } %>

@@ -1,169 +1,124 @@
-module.exports = function (app) {
+// Routes for the crypto demo.
+//
+// Every POST runs one operation, stores the submitted form values and the result in the
+// caller's session, then 303-redirects to GET /?tab=<op> (post/redirect/get), so a browser
+// refresh never re-submits a form.
 
-    var bodyParser = require('body-parser')
-    var urlencodedParser = bodyParser.urlencoded({extended: false})
-    var ursa = require('ursa');
+const express = require('express')
+const { CryptoInputError } = require('../lib/cryptoService')
 
-    var crypto = require('crypto')
-    
-// init controller data obj
-    var cryptodata = {
-        aesEnc : { data: "", secret: "", cipher: "" },  
-        aesDec : { cipher: "", secret: "", data: "" },
-        shaHash : { data: "", secret: "", hash: "" },
-        rsaEnc : { pub: "", data: "", cipher: "" },
-        rsaDec : { priv: "", data: "", cipher: "" },
-        menuItem : 1
-    }
+const OPS = [
+    { id: 'aes-encrypt', path: '/encrypt', label: 'AES Encrypt', group: 'Symmetric' },
+    { id: 'aes-decrypt', path: '/decrypt', label: 'AES Decrypt', group: 'Symmetric' },
+    { id: 'hash', path: '/hash', label: 'SHA-512 Hash', group: 'Hashing' },
+    { id: 'rsa-keys', path: '/rsaKeys', label: 'RSA Keys', group: 'Asymmetric' },
+    { id: 'rsa-encrypt', path: '/rsaEncrypt', label: 'RSA Encrypt', group: 'Asymmetric' },
+    { id: 'rsa-decrypt', path: '/rsaDecrypt', label: 'RSA Decrypt', group: 'Asymmetric' }
+]
+const OP_IDS = new Set(OPS.map(op => op.id))
+const DEFAULT_TAB = OPS[0].id
 
-// encryption helper function
-    function encrypt_helper(cryptodata, callback) {
-        
-        var cipher = crypto.createCipher('aes-256-ctr', cryptodata.aesEnc.secret)
-        var crypted = cipher.update(cryptodata.aesEnc.data,'utf8','hex')
-        crypted += cipher.final('hex');
-        
-        cryptodata.aesEnc.cipher = crypted
+const STATUS_TEXT = { 200: 'OK', 400: 'Bad Request', 500: 'Internal Server Error' }
 
-        callback(cryptodata)
-    }
-
-// decryption helper function
-    function decrypt_helper(cryptodata, callback) {
-        var decipher = crypto.createDecipher('aes-256-ctr', cryptodata.aesDec.secret)
-        var dec = decipher.update(cryptodata.aesDec.cipher,'hex','utf8')
-        dec += decipher.final('utf8');
-
-        cryptodata.aesDec.data = dec
-
-        callback (cryptodata)
-
-    }
-
-
-// hashing helper function
-    function hash_helper(cryptodata, callback) {
-
-        // create hash
-        var hash = crypto.createHmac('sha512', cryptodata.shaHash.secret)
-        hash.update(cryptodata.shaHash.data)
-        cryptodata.shaHash.hash = hash.digest('hex') 
-
-        callback (cryptodata)
-    }
-
-
-// login and serve up index
-    app.get('/', function (req, res) {
-
-        cryptodata = {
-            aesEnc : { data: "", secret: "", cipher: "" },  
-            aesDec : { cipher: "", secret: "", data: "" },
-            shaHash : { data: "", secret: "", hash: "" },
-            rsaEnc : { pub: "", data: "", cipher: "" },
-            rsaDec : { priv: "", data: "", cipher: "" }
-        }
-
-        res.setHeader('Content-Type', 'text/html');
-
-        cryptodata.menuItem = 1
-        res.render('./index', {cryptodata: cryptodata})
-    })
-
-// 1. AES 256 Encrypt
-    app.post('/encrypt', urlencodedParser, function (req, res) {
-
-        cryptodata.aesEnc.data = req.body.data
-        cryptodata.aesEnc.secret = req.body.secret
-
-        encrypt_helper (cryptodata, function (cryptodata) {
-            
-            cryptodata.aesDec.data = ""
-            cryptodata.menuItem = 1
-            res.render('./index', {cryptodata: cryptodata})
-        })
-    })
-
-
-// 2. AES 256 Decrypt
-    app.post('/decrypt', urlencodedParser, function (req, res) {
-       
-        cryptodata.aesDec.cipher = req.body.cipher
-        cryptodata.aesDec.secret = req.body.secret
-
-        decrypt_helper (cryptodata, function (cryptodata) {
-         
-            cryptodata.menuItem = 2
-            res.render('./index', {cryptodata: cryptodata})
-        })
-    })
-    
-
-// 3. SHA-2 Hash
-    app.post('/hash', urlencodedParser, function (req, res) {
-        
-        cryptodata.shaHash.data = req.body.data
-        cryptodata.shaHash.secret = req.body.secret
-
-        hash_helper (cryptodata, function (cryptodata) {
-            cryptodata.menuItem = 3
-            res.render('./index', {cryptodata: cryptodata})
-        })
-    })
-
-
-// 4. RSA Key Generation
-    app.post('/rsaKeys', urlencodedParser, function (req, res) {
-            
-        // create a pair of keys (a private key contains both keys...)
-        var keys = ursa.generatePrivateKey();
-
-        var privPem = keys.toPrivatePem('base64');
-        var pubPem = keys.toPublicPem('base64');
-       
-        cryptodata.rsaEnc.pub = pubPem
-        cryptodata.rsaDec.priv = privPem
-
-        cryptodata.menuItem = 4
-        res.render('./index', {cryptodata: cryptodata})
-    })
-
-
-// 5. RSA Encryption
-    app.post('/rsaEncrypt', urlencodedParser, function (req, res) {
-
-        cryptodata.rsaEnc.data = req.body.data
-        cryptodata.rsaEnc.pub = req.body.pub
-
-        // reset decryption plaintext so it doesn't show old results
-        cryptodata.rsaDec.data = ""
-                
-        // encrypt, with the public key
-        var data = new Buffer(cryptodata.rsaEnc.data)
-        var pub = ursa.createPublicKey(cryptodata.rsaEnc.pub, 'base64')
-        cryptodata.rsaEnc.cipher = pub.encrypt(data,'utf8', 'base64')
-
-        cryptodata.menuItem = 5
-        res.render('./index', {cryptodata: cryptodata})
-    })
-
-
-// 6. RSA Decryption
-    app.post('/rsaDecrypt', urlencodedParser, function (req, res) {
-
-        cryptodata.rsaDec.priv = req.body.priv
-        cryptodata.rsaDec.cipher = req.body.cipher
-                
-        // decrypt, with the private key
-        var priv = ursa.createPrivateKey(cryptodata.rsaDec.priv, 'utf8', 'base64')
-        cryptodata.rsaDec.data = priv.decrypt(cryptodata.rsaDec.cipher, 'base64')
-
-        cryptodata.menuItem = 6
-        res.render('./index', {cryptodata: cryptodata})
-    })
-
-
-// EOL
+function field(body, name) {
+    const value = body?.[name]
+    return typeof value === 'string' ? value : ''
 }
 
+function createCryptoController({ cryptoService, badge }) {
+    const router = express.Router()
 
+    // Runs an operation and records the outcome. Input errors become a 400 result shown in the
+    // response panel; anything else is a bug and goes to the app's 500 handler.
+    // `onSuccess(value)` updates other forms' pre-fills before the redirect is sent.
+    async function run(req, res, opId, fn, onSuccess) {
+        const started = process.hrtime.bigint()
+        let result
+        try {
+            const value = await fn()
+            result = { ok: true, status: 200, output: value.output, details: value.details }
+            onSuccess?.(value)
+        } catch (err) {
+            if (!(err instanceof CryptoInputError)) throw err
+            result = { ok: false, status: err.status, output: err.message, details: { error: err.name, message: err.message } }
+        }
+        result.statusText = STATUS_TEXT[result.status]
+        result.requestId = req.id
+        result.durationMs = Number((process.hrtime.bigint() - started) / 1000n) / 1000
+        req.session.results[opId] = result
+        res.redirect(303, `/?tab=${opId}`)
+    }
+
+    router.get('/', (req, res) => {
+        const tab = OP_IDS.has(req.query.tab) ? req.query.tab : DEFAULT_TAB
+        res.render('index', {
+            ops: OPS,
+            active: OPS.find(op => op.id === tab),
+            forms: req.session.forms,
+            result: req.session.results[tab],
+            badge
+        })
+    })
+
+    router.post('/encrypt', async (req, res) => {
+        const form = req.session.forms.aesEncrypt
+        form.data = field(req.body, 'data')
+        form.secret = field(req.body, 'secret')
+        await run(req, res, 'aes-encrypt', () => cryptoService.aesEncrypt(form.data, form.secret), ({ output }) => {
+            // Pre-fill AES Decrypt so the round trip is one click away
+            req.session.forms.aesDecrypt = { cipher: output, secret: form.secret }
+        })
+    })
+
+    router.post('/decrypt', async (req, res) => {
+        const form = req.session.forms.aesDecrypt
+        form.cipher = field(req.body, 'cipher')
+        form.secret = field(req.body, 'secret')
+        await run(req, res, 'aes-decrypt', () => cryptoService.aesDecrypt(form.cipher, form.secret))
+    })
+
+    router.post('/hash', async (req, res) => {
+        const form = req.session.forms.hash
+        form.data = field(req.body, 'data')
+        form.secret = field(req.body, 'secret')
+        await run(req, res, 'hash', () => cryptoService.hash(form.data, form.secret))
+    })
+
+    router.post('/rsaKeys', async (req, res) => {
+        await run(req, res, 'rsa-keys', () => cryptoService.rsaGenerateKeys(), keys => {
+            const forms = req.session.forms
+            forms.rsaKeys = { publicKey: keys.publicKey, privateKey: keys.privateKey }
+            forms.rsaEncrypt.pub = keys.publicKey
+            forms.rsaDecrypt = { cipher: '', priv: keys.privateKey }
+            delete req.session.results['rsa-encrypt']
+            delete req.session.results['rsa-decrypt']
+        })
+    })
+
+    router.post('/rsaEncrypt', async (req, res) => {
+        const form = req.session.forms.rsaEncrypt
+        form.data = field(req.body, 'data')
+        form.pub = field(req.body, 'pub')
+        await run(req, res, 'rsa-encrypt', () => cryptoService.rsaEncrypt(form.data, form.pub), ({ output }) => {
+            req.session.forms.rsaDecrypt.cipher = output
+            delete req.session.results['rsa-decrypt']
+        })
+    })
+
+    router.post('/rsaDecrypt', async (req, res) => {
+        const form = req.session.forms.rsaDecrypt
+        form.cipher = field(req.body, 'cipher')
+        form.priv = field(req.body, 'priv')
+        await run(req, res, 'rsa-decrypt', () => cryptoService.rsaDecrypt(form.cipher, form.priv))
+    })
+
+    // Clears everything this browser has entered or generated
+    router.post('/reset', (req, res) => {
+        req.resetSession()
+        res.redirect(303, '/')
+    })
+
+    return router
+}
+
+module.exports = { createCryptoController, OPS }

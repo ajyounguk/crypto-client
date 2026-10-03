@@ -1,0 +1,14 @@
+<h2 id="op-title">SHA-512 Hash</h2>
+<p class="op-desc">One-way digest. Leave the secret empty for plain SHA-512, or add one for a keyed HMAC-SHA-512 (a message authentication code).</p>
+
+<form method="POST" action="/hash" class="op-form">
+    <label for="hash-data">Plaintext</label>
+    <textarea id="hash-data" name="data" rows="4" placeholder="Text to hash" required spellcheck="false"><%= forms.hash.data %></textarea>
+
+    <label for="hash-secret">Secret <span class="optional">(optional, for HMAC)</span></label>
+    <input id="hash-secret" name="secret" type="text" value="<%= forms.hash.secret %>" placeholder="HMAC key" autocomplete="off" spellcheck="false">
+
+    <div class="actions"><button type="submit" class="btn btn-primary">Hash</button></div>
+</form>
+
+<%- include('../partials/result', { outputLabel: 'Digest (hex)' }) %>

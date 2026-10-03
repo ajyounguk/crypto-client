@@ -1,0 +1,14 @@
+<h2 id="op-title">RSA Encrypt</h2>
+<p class="op-desc">RSA-OAEP with SHA-256, using the public key. RSA can only encrypt a short message (190 bytes for a 2048-bit key), which is why real systems use it to wrap an AES key.</p>
+
+<form method="POST" action="/rsaEncrypt" class="op-form">
+    <label for="rsa-enc-data">Plaintext</label>
+    <textarea id="rsa-enc-data" name="data" rows="4" placeholder="Short text to encrypt" required spellcheck="false"><%= forms.rsaEncrypt.data %></textarea>
+
+    <label for="rsa-enc-pub">Public key</label>
+    <textarea id="rsa-enc-pub" name="pub" rows="9" placeholder="-----BEGIN PUBLIC KEY-----" required spellcheck="false" class="mono"><%= forms.rsaEncrypt.pub %></textarea>
+
+    <div class="actions"><button type="submit" class="btn btn-primary">Encrypt</button></div>
+</form>
+
+<%- include('../partials/result', { outputLabel: 'Cipher text (base64)' }) %>

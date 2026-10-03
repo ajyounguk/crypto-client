@@ -1,0 +1,14 @@
+<h2 id="op-title">AES Encrypt</h2>
+<p class="op-desc">AES-256-GCM (authenticated encryption). The secret is stretched into a 256-bit key with scrypt and a random salt, so encrypting the same text twice gives different output.</p>
+
+<form method="POST" action="/encrypt" class="op-form">
+    <label for="aes-enc-data">Plaintext</label>
+    <textarea id="aes-enc-data" name="data" rows="4" placeholder="Text to encrypt" required spellcheck="false"><%= forms.aesEncrypt.data %></textarea>
+
+    <label for="aes-enc-secret">Secret</label>
+    <input id="aes-enc-secret" name="secret" type="text" value="<%= forms.aesEncrypt.secret %>" placeholder="Passphrase" required autocomplete="off" spellcheck="false">
+
+    <div class="actions"><button type="submit" class="btn btn-primary">Encrypt</button></div>
+</form>
+
+<%- include('../partials/result', { outputLabel: 'Cipher text (hex)' }) %>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <title><%= pageTitle %> · Crypto Client</title>
+    <link rel="stylesheet" href="/assets/styles.css">
+    <script src="/assets/app.js" defer></script>
+</head>
+<body>
+<header class="topbar">
+    <a class="brand" href="/">
+        <span class="brand-mark" aria-hidden="true">🔐</span>
+        <span class="brand-name">Crypto Client</span>
+        <span class="brand-sub">cryptography demo</span>
+    </a>
+    <span class="env-badge env-<%= badge.tone %>" title="Server bind address">
+        <span class="env-dot" aria-hidden="true"></span><%= badge.label %> · <%= badge.detail %>
+    </span>
+</header>
