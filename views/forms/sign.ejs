@@ -1,0 +1,14 @@
+<h2 id="op-title">Sign</h2>
+<p class="op-desc">Signs a message with a private key. Ed25519 keys (from Signing Keys) use Ed25519; RSA keys (from RSA Keys) use RSA-PSS with SHA-256. The message, signature and public key are filled into Verify.</p>
+
+<form method="POST" action="/sign" class="op-form">
+    <label for="sign-data">Message</label>
+    <textarea id="sign-data" name="data" rows="4" placeholder="Message to sign" required spellcheck="false"><%= forms.sign.data %></textarea>
+
+    <label for="sign-priv">Private key</label>
+    <textarea id="sign-priv" name="priv" rows="4" placeholder="-----BEGIN PRIVATE KEY-----" required spellcheck="false" class="mono"><%= forms.sign.priv %></textarea>
+
+    <div class="actions"><button type="submit" class="btn btn-primary">Sign</button></div>
+</form>
+
+<%- include('../partials/result', { outputLabel: 'Signature (base64)' }) %>

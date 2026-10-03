@@ -7,7 +7,7 @@ const { createCryptoService } = require('../lib/cryptoService')
 const { createSessionStore } = require('../lib/sessionStore')
 
 const fastCrypto = createCryptoService({ scryptParams: { N: 1024, r: 8, p: 1 } })
-const TABS = ['aes-encrypt', 'aes-decrypt', 'hash', 'rsa-keys', 'rsa-encrypt', 'rsa-decrypt']
+const TABS = ['aes-encrypt', 'aes-decrypt', 'hash', 'rsa-keys', 'rsa-encrypt', 'rsa-decrypt', 'sig-keys', 'sign', 'verify']
 
 function makeApp(overrides = {}) {
     const logged = []

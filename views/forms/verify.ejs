@@ -1,0 +1,21 @@
+<h2 id="op-title">Verify</h2>
+<p class="op-desc">Checks a signature against a message and public key. Use the tamper buttons to change one character of the message, or one bit of the signature, and watch verification fail.</p>
+
+<form method="POST" action="/verify" class="op-form">
+    <label for="verify-data">Message</label>
+    <textarea id="verify-data" name="data" rows="4" placeholder="Signed message" required spellcheck="false"><%= forms.verify.data %></textarea>
+
+    <label for="verify-signature">Signature (base64)</label>
+    <textarea id="verify-signature" name="signature" rows="3" placeholder="Output from Sign" required spellcheck="false" class="mono"><%= forms.verify.signature %></textarea>
+
+    <label for="verify-pub">Public key</label>
+    <textarea id="verify-pub" name="pub" rows="4" placeholder="-----BEGIN PUBLIC KEY-----" required spellcheck="false" class="mono"><%= forms.verify.pub %></textarea>
+
+    <div class="actions actions-row">
+        <button type="submit" class="btn btn-primary">Verify</button>
+        <button type="submit" name="tamper" value="message" class="btn btn-warn">Tamper message &amp; verify</button>
+        <button type="submit" name="tamper" value="signature" class="btn btn-warn">Tamper signature &amp; verify</button>
+    </div>
+</form>
+
+<%- include('../partials/result', { outputLabel: 'Verdict' }) %>

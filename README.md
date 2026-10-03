@@ -1,6 +1,6 @@
 # Crypto Client
 
-A small local web app that demonstrates symmetric encryption, hashing and public-key encryption with Node's built-in `node:crypto` module:
+A small local web app that demonstrates symmetric encryption, hashing, public-key encryption and digital signatures with Node's built-in `node:crypto` module:
 
 | Operation | Algorithm |
 | --- | --- |
@@ -8,6 +8,8 @@ A small local web app that demonstrates symmetric encryption, hashing and public
 | **SHA-512 Hash** | SHA-512, or HMAC-SHA-512 when a secret is given |
 | **RSA Keys** | 2048-bit RSA key pair, PEM encoded (SPKI public, PKCS#8 private) |
 | **RSA Encrypt / Decrypt** | RSA-OAEP with SHA-256 |
+| **Signing Keys** | Ed25519 key pair, PEM encoded |
+| **Sign / Verify** | Ed25519, or RSA-PSS with SHA-256 when given an RSA key. Verify has buttons that tamper with the message or the signature first |
 
 Every operation shows its output, a copy button, and a **Details** panel listing the parameters used (salt, IV, auth tag, key size and so on), so you can see what each algorithm actually produces.
 
@@ -48,12 +50,17 @@ The badge at the top right shows who can reach the server:
 
 - Pick an operation from the sidebar. On a narrow screen the sidebar becomes a scrolling strip across the top.
 - Each submit runs the operation, then redirects back to the page (post/redirect/get), so refreshing never re-submits a form.
-- Results chain together: encrypting pre-fills the matching decrypt form, and generating RSA keys fills both RSA forms.
+- Results chain together: encrypting pre-fills the matching decrypt form, generating keys fills the forms that use them, and signing fills Verify with the message, the signature and the matching public key.
+- **Verify** shows a green **✓ VALID** or red **✗ INVALID** verdict. **Tamper message & verify** changes one character of the message (the first letter or digit moves to the next one, so `R` becomes `S`). **Tamper signature & verify** flips one bit in the middle of the signature. Either way the tampered value stays in the form and a note says exactly what changed, so you can see that a one-character edit is enough to break the signature.
 - Bad input (wrong secret, tampered cipher text, a malformed key, text too long for RSA) shows a red **400 Bad Request** result that explains what went wrong.
-- **Reset session** (red, asks for confirmation) clears everything you've entered or generated. **Generate key pair** asks before replacing an existing pair.
+- **Reset session** (red, asks for confirmation) clears everything you've entered or generated. Both **Generate key pair** buttons ask before replacing an existing pair.
 - The response panel footer shows the request ID. Unexpected server errors show the same ID, and it matches the server log line.
 
 ![RSA Keys in the dark theme](screenshots/rsa-keys-dark.png)
+
+![Verify after tampering with the message: INVALID](screenshots/verify-tampered-light.png)
+
+![Verify with an untouched signature: VALID, dark theme](screenshots/verify-valid-dark.png)
 
 <img src="screenshots/aes-decrypt-narrow.png" alt="AES Decrypt on a narrow screen, showing a wrong-secret error" width="320">
 
@@ -72,14 +79,14 @@ The badge at the top right shows who can reach the server:
 npm test
 ```
 
-The suite uses `node:test` and `supertest`. It covers every route (success, input errors and unexpected errors), the post/redirect/get flow and form pre-fills, session isolation and expiry, the cross-site POST check, config loading and the badge, security headers, page structure (no duplicate ids, labels wired to inputs, no inline script), and HTML escaping of hostile input. It also checks the crypto against published test vectors (FIPS 180-2 for SHA-512, RFC 4231 for HMAC).
+The suite uses `node:test` and `supertest`. It covers every route (success, input errors and unexpected errors), the post/redirect/get flow and form pre-fills, session isolation and expiry, the cross-site POST check, config loading and the badge, security headers, page structure (no duplicate ids, labels wired to inputs, no inline script), and HTML escaping of hostile input. It also checks the crypto against published test vectors (FIPS 180-2 for SHA-512, RFC 4231 for HMAC), and tests that both kinds of tampering turn a valid signature invalid.
 
 ## Project layout
 
 ```
 app.js                        createApp() factory; listens only when run directly
 controllers/cryptoController.js  routes and post/redirect/get handling
-lib/cryptoService.js          AES-GCM, SHA-512/HMAC and RSA-OAEP over node:crypto
+lib/cryptoService.js          AES-GCM, SHA-512/HMAC, RSA-OAEP and Ed25519/RSA-PSS signatures over node:crypto
 lib/sessionStore.js           in-memory per-browser session store
 lib/config.js                 HOST/PORT loading and the bind-address badge
 views/                        EJS templates (layout partials + one form per operation)
@@ -113,12 +120,12 @@ flowchart TB
         direction TB
         MW["Middleware<br/>request ID, security headers,<br/>no-store, same-origin POST check,<br/>urlencoded body (64 kB)"]
         Sessions["Session store<br/>in-memory, per browser,<br/>30 min idle TTL"]
-        Ctrl["Crypto controller<br/>GET / , POST /encrypt /decrypt<br/>/hash /rsaKeys /rsaEncrypt<br/>/rsaDecrypt /reset"]
+        Ctrl["Crypto controller<br/>GET / , POST /encrypt /decrypt<br/>/hash /rsaKeys /rsaEncrypt /rsaDecrypt<br/>/sigKeys /sign /verify /reset"]
         Views["EJS views<br/>layout, sidebar, forms,<br/>response panel"]
         Err["404 / error handler"]
     end
 
-    Svc["Crypto service<br/>AES-256-GCM + scrypt<br/>SHA-512 / HMAC<br/>RSA-OAEP"]
+    Svc["Crypto service<br/>AES-256-GCM + scrypt<br/>SHA-512 / HMAC<br/>RSA-OAEP<br/>Ed25519 / RSA-PSS + tamper"]
     Node["node:crypto"]
     Static["public/<br/>styles.css, app.js"]
 

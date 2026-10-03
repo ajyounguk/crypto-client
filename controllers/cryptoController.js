@@ -5,7 +5,7 @@
 // refresh never re-submits a form.
 
 const express = require('express')
-const { CryptoInputError } = require('../lib/cryptoService')
+const { CryptoInputError, tamperMessage, tamperSignature } = require('../lib/cryptoService')
 
 const OPS = [
     { id: 'aes-encrypt', path: '/encrypt', label: 'AES Encrypt', group: 'Symmetric' },
@@ -13,7 +13,10 @@ const OPS = [
     { id: 'hash', path: '/hash', label: 'SHA-512 Hash', group: 'Hashing' },
     { id: 'rsa-keys', path: '/rsaKeys', label: 'RSA Keys', group: 'Asymmetric' },
     { id: 'rsa-encrypt', path: '/rsaEncrypt', label: 'RSA Encrypt', group: 'Asymmetric' },
-    { id: 'rsa-decrypt', path: '/rsaDecrypt', label: 'RSA Decrypt', group: 'Asymmetric' }
+    { id: 'rsa-decrypt', path: '/rsaDecrypt', label: 'RSA Decrypt', group: 'Asymmetric' },
+    { id: 'sig-keys', path: '/sigKeys', label: 'Signing Keys', group: 'Signatures' },
+    { id: 'sign', path: '/sign', label: 'Sign', group: 'Signatures' },
+    { id: 'verify', path: '/verify', label: 'Verify', group: 'Signatures' }
 ]
 const OP_IDS = new Set(OPS.map(op => op.id))
 const DEFAULT_TAB = OPS[0].id
@@ -36,7 +39,7 @@ function createCryptoController({ cryptoService, badge }) {
         let result
         try {
             const value = await fn()
-            result = { ok: true, status: 200, output: value.output, details: value.details }
+            result = { ok: true, status: 200, output: value.output, details: value.details, verdict: value.verdict }
             onSuccess?.(value)
         } catch (err) {
             if (!(err instanceof CryptoInputError)) throw err
@@ -110,6 +113,47 @@ function createCryptoController({ cryptoService, badge }) {
         form.cipher = field(req.body, 'cipher')
         form.priv = field(req.body, 'priv')
         await run(req, res, 'rsa-decrypt', () => cryptoService.rsaDecrypt(form.cipher, form.priv))
+    })
+
+    router.post('/sigKeys', async (req, res) => {
+        await run(req, res, 'sig-keys', () => cryptoService.sigGenerateKeys(), keys => {
+            const forms = req.session.forms
+            forms.sigKeys = { publicKey: keys.publicKey, privateKey: keys.privateKey }
+            forms.sign.priv = keys.privateKey
+            forms.verify = { data: '', signature: '', pub: keys.publicKey }
+            delete req.session.results.sign
+            delete req.session.results.verify
+        })
+    })
+
+    router.post('/sign', async (req, res) => {
+        const form = req.session.forms.sign
+        form.data = field(req.body, 'data')
+        form.priv = field(req.body, 'priv')
+        await run(req, res, 'sign', () => cryptoService.sign(form.data, form.priv), ({ signature, publicKey }) => {
+            // Pre-fill Verify with the message, signature and the public half of the signing key
+            req.session.forms.verify = { data: form.data, signature, pub: publicKey }
+            delete req.session.results.verify
+        })
+    })
+
+    // `tamper` = 'message' | 'signature' changes one character/bit before verifying, and the
+    // tampered value is kept in the form so the user can see exactly what changed
+    router.post('/verify', async (req, res) => {
+        const form = req.session.forms.verify
+        form.data = field(req.body, 'data')
+        form.signature = field(req.body, 'signature')
+        form.pub = field(req.body, 'pub')
+        const tamper = field(req.body, 'tamper')
+
+        await run(req, res, 'verify', () => {
+            let change
+            if (tamper === 'message' && form.data) ({ value: form.data, change } = tamperMessage(form.data))
+            if (tamper === 'signature' && form.signature) ({ value: form.signature, change } = tamperSignature(form.signature))
+            const value = cryptoService.verify(form.data, form.signature, form.pub)
+            if (change) value.details = { tampered: change, ...value.details }
+            return value
+        })
     })
 
     // Clears everything this browser has entered or generated
