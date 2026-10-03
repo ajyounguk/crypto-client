@@ -14,7 +14,8 @@ const SECURITY_HEADERS = {
     'Content-Security-Policy': "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; " +
         "form-action 'self'; frame-ancestors 'none'; base-uri 'none'; object-src 'none'",
     'X-Content-Type-Options': 'nosniff',
-    'Referrer-Policy': 'no-referrer',
+    // Not 'no-referrer': that makes browsers send "Origin: null" on form POSTs, which sameOriginOnly rejects
+    'Referrer-Policy': 'same-origin',
     'X-Frame-Options': 'DENY'
 }
 

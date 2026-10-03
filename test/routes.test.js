@@ -80,6 +80,8 @@ describe('page rendering', () => {
         assert.match(res.headers['content-security-policy'], /script-src 'self'/)
         assert.equal(res.headers['x-content-type-options'], 'nosniff')
         assert.equal(res.headers['x-frame-options'], 'DENY')
+        // 'no-referrer' would make browsers send "Origin: null" on our own form posts, which the CSRF check blocks
+        assert.equal(res.headers['referrer-policy'], 'same-origin')
         assert.equal(res.headers['cache-control'], 'no-store')
         assert.match(res.headers['x-request-id'], /^[0-9a-f-]{36}$/)
         assert.equal(res.headers['x-powered-by'], undefined)
